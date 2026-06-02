@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva y Cotización de Menú</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Formulario de Reserva de Mesa</h1>
+        <h2>Planifica tu visita y cotiza tus antojitos salvadoreños</h2>
+        <hr>
+    </header>
+
+    <main>
+        <form id="formulario-reserva" onsubmit="procesarReserva(event)">
+            
+            <fieldset>
+                <legend><strong>1. Datos de la Reserva</strong></legend>
+                <p>
+                    <label for="nombre">Nombre Completo:</label><br>
+                    <input type="text" id="nombre" name="nombre" required placeholder="Ej. Juan Pérez">
+                </p>
+                <p>
+                    <label for="telefono">Número de Teléfono:</label><br>
+                    <input type="tel" id="telefono" name="telefono" required placeholder="Ej. 7777-7777">
+                </p>
+                <p>
+                    <label for="fecha">Fecha:</label><br>
+                    <input type="date" id="fecha" name="fecha" required>
+                </p>
+                <p>
+                    <label for="hora">Hora:</label><br>
+                    <input type="time" id="hora" name="hora" required>
+                </p>
+                <p>
+                    <label for="personas">Cantidad de Personas:</label><br>
+                    <input type="number" id="personas" name="personas" min="1" max="20" required value="1">
+                </p>
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+                <legend><strong>2. Selecciona tus Platillos y Antojos (Pre-orden)</strong></legend>
+                <p>Indica la cantidad de cada producto que deseas ordenar para tu llegada:</p>
+                
+                <p>
+                    <label for="cant-pupusas">Pupusas ($1.25 c/u):</label><br>
+                    <input type="number" id="cant-pupusas" min="0" value="0" onchange="calcularTotal()">
+                </p>
+
+                <p>
+                    <label for="cant-elotes">Elotes Locos ($2.00 c/u):</label><br>
+                    <input type="number" id="cant-elotes" min="0" value="0" onchange="calcularTotal()">
+                </p>
+
+                <p>
+                    <label for="cant-sopas">Sopa de Gallina India ($6.50 c/u):</label><br>
+                    <input type="number" id="cant-sopas" min="0" value="0" onchange="calcularTotal()">
+                </p>
+
+                <p>
+                    <label for="cant-pasteles">Orden de Pastelitos ($1.50 c/u):</label><br>
+                    <input type="number" id="cant-pasteles" min="0" value="0" onchange="calcularTotal()">
+                </p>
+
+                <p>
+                    <label for="cant-horchata">Horchata de Morro ($1.50 c/u):</label><br>
+                    <input type="number" id="cant-horchata" min="0" value="0" onchange="calcularTotal()">
+                </p>
+
+                <p>
+                    <label for="cant-ensalada">Fresco de Ensalada ($1.50 c/u):</label><br>
+                    <input type="number" id="cant-ensalada" min="0" value="0" onchange="calcularTotal()">
+                </p>
+
+<p>
+                    <label for="cant-ensalada">soda ($1.50 c/u):</label><br>
+                    <input type="number" id="cant-ensalada" min="0" value="0" onchange="calcularTotal()">
+                </p>
+
+            </fieldset>
+
+            <br>
+
+            <fieldset>
+                <legend><strong>3. Cuenta Estimada</strong></legend>
+                <h3>Total a Pagar por Consumo: $<span id="precio-total">0.00</span></h3>
+            </fieldset>
+
+            <br>
+
+            <p>
+                <button type="submit">Confirmar y Enviar Reserva</button>
+            </p>
+        </form>
+
+        <hr>
+
+        <section id="bloque-confirmacion" style="display: none;">
+            <h2>¡Reserva Confirmada Exitosamente!</h2>
+            <p>Gracias por tu preferencia. A continuación, el resumen de tu reservación:</p>
+            <ul>
+                <li><strong>Cliente:</strong> <span id="conf-nombre"></span></li>
+                <li><strong>Teléfono de contacto:</strong> <span id="conf-telefono"></span></li>
+                <li><strong>Fecha y Hora:</strong> <span id="conf-fecha"></span> a las <span id="conf-hora"></span></li>
+                <li><strong>Mesa para:</strong> <span id="conf-personas"></span> personas</li>
+                <li><strong>Consumo pre-ordenado:</strong> $<span id="conf-total"></span></li>
+            </ul>
+            <p><em>*Te esperamos 10 minutos antes de tu hora reservada. ¡Buen provecho!</em></p>
+        </section>
+    </main>
+
+    <script>
+        // Función para calcular el total en tiempo real
+        function calcularTotal() {
+            // Precios definidos
+            const PRECIO_PUPUSA = 1.25;
+            const PRECIO_ELOTE = 2.00;
+            const PRECIO_SOPA = 6.50;
+            const PRECIO_PASTEL = 1.50;
+            const PRECIO_HORCHATA = 1.50;
+            const PRECIO_ENSALADA = 1.50;
+
+            // Obtener cantidades ingresadas
+            const pupusas = parseInt(document.getElementById('cant-pupusas').value) || 0;
+            const elotes = parseInt(document.getElementById('cant-elotes').value) || 0;
+            const sopas = parseInt(document.getElementById('cant-sopas').value) || 0;
+            const pasteles = parseInt(document.getElementById('cant-pasteles').value) || 0;
+            const horchata = parseInt(document.getElementById('cant-horchata').value) || 0;
+            const ensalada = parseInt(document.getElementById('cant-ensalada').value) || 0;
+
+            // Operación matemática del total
+            const total = (pupusas * PRECIO_PUPUSA) + 
+                          (elotes * PRECIO_ELOTE) + 
+                          (sopas * PRECIO_SOPA) + 
+                          (pasteles * PRECIO_PASTEL) + 
+                          (horchata * PRECIO_HORCHATA) + 
+                          (ensalada * PRECIO_ENSALADA);
+
+            // Mostrar el resultado formateado a dos decimales
+            document.getElementById('precio-total').innerText = total.toFixed(2);
+            return total.toFixed(2);
+        }
+
+        // Función que procesa el formulario al dar clic en enviar
+        function procesarReserva(event) {
+            // Evita que la página se reinicie para poder ver el resultado
+            event.preventDefault(); 
+
+            // Obtener los datos del cliente
+            const nombre = document.getElementById('nombre').value;
+            const telefono = document.getElementById('telefono').value;
+            const fecha = document.getElementById('fecha').value;
+            const hora = document.getElementById('hora').value;
+            const personas = document.getElementById('personas').value;
+            const totalFinal = calcularTotal();
+
+            // Insertar los datos en el bloque de confirmación inferior
+            document.getElementById('conf-nombre').innerText = nombre;
+            document.getElementById('conf-telefono').innerText = telefono;
+            document.getElementById('conf-fecha').innerText = fecha;
+            document.getElementById('conf-hora').innerText = hora;
+            document.getElementById('conf-personas').innerText = personas;
+            document.getElementById('conf-total').innerText = totalFinal;
+
+            // Hacer visible el bloque de confirmación oculto
+            document.getElementById('bloque-confirmacion').style.display = 'block';
+
+            // Desplazar la pantalla automáticamente hacia abajo para ver la confirmación
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>
